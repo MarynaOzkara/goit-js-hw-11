@@ -16,17 +16,17 @@ export default class PhotoSearchService {
     }
 
     fetchPhotos() {
-        console.log(this);
+        
         const url = `${BASE_URL}?key=${API_KEY}&${params}&q=${this.searchQuery}&page=${this.page}`;
 
         const getPhoto = () => axios.get(url);
 
-        getPhoto()
+        return getPhoto()
             .then(({data}) => {
                 this.page += 1;
-                console.log(data);
+                return data.hits;   
             })
-            .catch(({error}) => {
+            .catch((error) => {
                 console.log(error);
             });
     }
