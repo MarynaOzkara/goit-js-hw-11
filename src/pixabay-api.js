@@ -2,12 +2,7 @@ import axios from "axios";
 
 const BASE_URL = `https://pixabay.com/api/`;
 const API_KEY = `38565431-b345df84834b1c56108720619`;
-const params = new URLSearchParams ({
-        image_type: `photo`,
-        orientation: `horizontal`,
-        safesearch: true,
-        per_page: 40,
-    });
+
 
 export default class PhotoSearchService {
     constructor() {
@@ -15,20 +10,31 @@ export default class PhotoSearchService {
         this.page = 1;
     }
 
-    fetchPhotos() {
-        
-        const url = `${BASE_URL}?key=${API_KEY}&${params}&q=${this.searchQuery}&page=${this.page}`;
-
-        const getPhoto = () => axios.get(url);
-
-        return getPhoto()
-            .then(({data}) => {
-                this.page += 1;
-                return data.hits;   
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+   async fetchPhotos() {
+        const url = `${BASE_URL}`;
+        const params = {
+            key: API_KEY,
+            image_type: `photo`,
+            orientation: `horizontal`,
+            safesearch: true,
+            per_page: 40,
+            q: this.searchQuery,
+            page: this.page,
+        };
+        try {
+            const response = await axios.get(url, { params });
+            this.page += 1;
+            const { hits, totalHits } = response.data;
+            
+            if (totalHits === 0) {
+                throw new Error('No images matching your search query.');
+              }
+              return { hits, totalHits };
+            } catch (error) {
+              console.log(error);
+              throw error;
+        }
+          
     }
     resetPage() {
         this.page = 1;
