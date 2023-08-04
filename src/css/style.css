@@ -22,6 +22,12 @@ img{
 }
 .load-more{
     margin-top: 20px;
+    margin-bottom: 20px;
+    border: none;
+    background-color: teal;
+    color: #fff;
+    width: 100px;height: 30px;
+    border-radius: 5px;
    
 }
 .info{
@@ -31,4 +37,17 @@ img{
     border-bottom: 1px solid #000;
     border-left: 1px solid #000;
     border-right: 1px solid #000;
+}
+.search{
+    width: 100px;
+    height: 30px;
+    border: none;
+    background-color: teal;
+    color: #fff;
+    border-radius: 5px;
+}
+.search-form input{
+    width: 300px;
+    height: 24px;
+
 }

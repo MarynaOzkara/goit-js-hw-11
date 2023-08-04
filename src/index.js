@@ -13,7 +13,7 @@ const refs = {
 const lightbox = new SimpleLightbox('.gallery a');
 const photoSearchService = new PhotoSearchService();
 
-refs.loadMoreBtn.classList.add('is-hidden');
+// refs.loadMoreBtn.classList.add('is-hidden');
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
@@ -21,6 +21,7 @@ refs.loadMoreBtn.addEventListener('click', onLoadMore);
 async function onSearch(event) {
     event.preventDefault();
     
+    refs.loadMoreBtn.hidden = true; 
     clearPhotoGallery();
     const searchQuery = event.currentTarget.elements.searchQuery.value;
     if(!searchQuery) { 
@@ -31,13 +32,13 @@ async function onSearch(event) {
     photoSearchService.resetPage();
 
     try { 
-        const { hits, totalHits } = await photoSearchService.fetchPhotos();
+        const { hits, total } = await photoSearchService.fetchPhotos();
         appendPhotoGallery(hits);
-        showTotalHits(totalHits); 
-        refs.loadMoreBtn.classList.remove('is-hidden');    
+        showTotalHits(total); 
+        refs.loadMoreBtn.hidden = false;    
     } catch (error) {
         console.log(error);
-        refs.loadMoreBtn.classList.add('is-hidden');
+        refs.loadMoreBtn.hidden = true; ;
         Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
   }
       
@@ -47,10 +48,10 @@ async function onLoadMore() {
     
     if (!hasMorePhotos) return;
    try {
-        const { hits, totalHits } = await photoSearchService.fetchPhotos();
+        const { hits } = await photoSearchService.fetchPhotos();
         if (hits.length === 0) {
             hasMorePhotos = false;
-            refs.loadMoreBtn.classList.add('is-hidden');
+            refs.loadMoreBtn.hidden = true; 
             Notiflix.Notify.info('There are no more photos.');
           } else {
             appendPhotoGallery(hits);
@@ -93,17 +94,17 @@ function appendPhotoGallery(arr) {
     refs.getGallery.insertAdjacentHTML('beforeend', markup);
     lightbox.refresh();
     if (!hasMorePhotos) {
-        refs.loadMoreBtn.classList.add('is-hidden');
+        refs.loadMoreBtn.hidden = true; ;
       }
 }
 function clearPhotoGallery() {
     refs.getGallery.innerHTML = '';
 }
- function showTotalHits(totalHits) {
-    if (totalHits === 0) {
+ function showTotalHits(total) {
+    if (total === 0) {
         Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
       } else {
-        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+        Notiflix.Notify.success(`Hooray! We found ${total} images.`);
       }
     
  }

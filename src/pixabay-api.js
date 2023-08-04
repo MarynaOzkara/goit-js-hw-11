@@ -24,12 +24,12 @@ export default class PhotoSearchService {
         try {
             const response = await axios.get(url, { params });
             this.page += 1;
-            const { hits, totalHits } = response.data;
+            const { hits, total } = response.data;
             
-            if (totalHits === 0) {
+            if (total === 0) {
                 throw new Error('No images matching your search query.');
               }
-              return { hits, totalHits };
+              return { hits, total };
             } catch (error) {
               console.log(error);
               throw error;
