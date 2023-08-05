@@ -22,6 +22,7 @@ async function onSearch(event) {
     event.preventDefault();
     
     refs.loadMoreBtn.hidden = true; 
+    // refs.searchBtn.disable = false;
     clearPhotoGallery();
     const searchQuery = event.currentTarget.elements.searchQuery.value;
     if(!searchQuery) { 
@@ -35,7 +36,8 @@ async function onSearch(event) {
         const { hits, total } = await photoSearchService.fetchPhotos();
         appendPhotoGallery(hits);
         showTotalHits(total); 
-        refs.loadMoreBtn.hidden = false;    
+        refs.loadMoreBtn.hidden = false; 
+        // refs.searchBtn.disable = true;   
     } catch (error) {
         console.log(error);
         refs.loadMoreBtn.hidden = true; ;
